@@ -3,15 +3,9 @@ const { sigmoid } = require('../src/ActivationFunctions');
 const NeuralNetwork = require('../src/NeuralNetwork');
 const dataset = require('./dataset.json');
 
-function normalizeData(data) {
-    const max = Math.max(...data);
-    const min = Math.min(...data);
-    return data.map(x => (x - min) / (max - min));
-}
-
-function normalizeSingle(value, min, max) {
-    return (value - min) / (max - min);
-}
+const {
+    normalizeData,
+} = require('../src/Utils');
 
 const studyHours = dataset.data.map(data => data.study_hours);
 const passes = dataset.data.map(data => data.pass);
@@ -61,12 +55,7 @@ function testNetwork() {
     }
 }
 
-// trainNetwork();
-
-// nn.save('exam-pass-predict/model.json');
-
-nn = nn.load('exam-pass-predict/model.json');
-
+trainNetwork();
 testNetwork();
 
-console.log(nn.feedForward([normalizeSingle(1, 0, 8)])[0].toFixed(4));
+nn.save('exam-pass-predict/model.json');
