@@ -12,22 +12,40 @@ class NeuralNetwork {
         this.layers = new Array(neuronCounts.length - 1);
 
         for (let i = 0; i < this.layers.length; i++) {
-            this.layers[i] = new Layer(neuronCounts[i], neuronCounts[i + 1]);
+            this.layers[i] = new Layer(neuronCounts[i], neuronCounts[i + 1], i == 0 ? null : this.activationFunctions[i - 1], this.activationFunctions[i] || null);
         }
     }
 
     // inputValues sesuai dengan banyak neuron / features.
     feedForward(inputFeatures) {
-        let output = this.layers[0].feedForward(inputFeatures, this.activationFunctions[0] || null);
+        if (!inputFeatures || inputFeatures.length === 0) {
+            throw new Error('[NeuralNetwork::feedForward] Invalid input features');
+        }
+
+        let output = this.layers[0].feedForward(inputFeatures);
 
         for (let i = 1; i < this.layers.length; i++) {
-            output = this.layers[i].feedForward(output, this.activationFunctions[i] || null);
+            output = this.layers[i].feedForward(output);
         }
 
         return output;
     }
 
     backPropagation(inputFeatures, targetValues, learningRate) {
+        if (!inputFeatures || inputFeatures.length === 0) {
+            throw new Error('[NeuralNetwork::backPropagation] Invalid input features');
+        }
+        if (!targetValues || targetValues.length === 0) {
+            throw new Error('[NeuralNetwork::backPropagation] Invalid target values');
+        }
+
+        if (inputFeatures.length !== this.layers[0].inputNeuronCount) {
+            throw new Error(`[NeuralNetwork::backPropagation] Input features length (${inputFeatures.length}) does not match input layer neuron count (${this.layers[0].inputNeuronCount})`);
+        }
+        if (targetValues.length !== this.layers[this.layers.length - 1].outputNeuronCount) {
+            throw new Error(`[NeuralNetwork::backPropagation] Target values length (${targetValues.length}) does not match output layer neuron count (${this.layers[this.layers.length - 1].outputNeuronCount})`);
+        }
+
         const output = this.feedForward(inputFeatures);
 
         let nextLayerDeltas = null;
@@ -39,7 +57,6 @@ class NeuralNetwork {
             nextLayerDeltas = this.layers[i].backPropagate(
                 nextLayerDeltas,
                 nextLayerWeights,
-                this.activationFunctions[i] || null,
                 learningRate,
                 isOutputLayer,
                 targetValues
@@ -84,7 +101,7 @@ class NeuralNetwork {
         }
     }
 
-    load(path) {
+    static load(path) {
         try {
             const model = JSON.parse(fs.readFileSync(path, 'utf8'));
 

@@ -1,0 +1,4 @@
+node_modules
+mnist/mnist_test.csv
+mnist/mnist_train.csv
+package-lock.json
