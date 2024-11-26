@@ -1,0 +1,24 @@
+{
+    "data": [
+        {
+            "study_hours": 1,
+            "pass": 0
+        },
+        {
+            "study_hours": 2,
+            "pass": 0
+        },
+        {
+            "study_hours": 4,
+            "pass": 1
+        },
+        {
+            "study_hours": 6,
+            "pass": 1
+        },
+        {
+            "study_hours": 8,
+            "pass": 1
+        }
+    ]
+}

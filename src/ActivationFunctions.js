@@ -1,13 +1,15 @@
 
-function sigmoid(x) {
-    return 1 / (1 + Math.exp(-x));
+
+const sigmoid = {
+    name: 'sigmoid',
+    fn: x => 1 / (1 + Math.exp(-x)),
+    derivative: (x) => {
+        const fx = sigmoid.fn(x);
+        return fx * (1 - fx);
+    }
 }
 
-function relu(x) {
-    return Math.max(0, x);
-}
 
 module.exports = {
     sigmoid,
-    relu
 };
