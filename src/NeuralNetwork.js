@@ -32,20 +32,6 @@ class NeuralNetwork {
     }
 
     backPropagation(inputFeatures, targetValues, learningRate) {
-        if (!inputFeatures || inputFeatures.length === 0) {
-            throw new Error('[NeuralNetwork::backPropagation] Invalid input features');
-        }
-        if (!targetValues || targetValues.length === 0) {
-            throw new Error('[NeuralNetwork::backPropagation] Invalid target values');
-        }
-
-        if (inputFeatures.length !== this.layers[0].inputNeuronCount) {
-            throw new Error(`[NeuralNetwork::backPropagation] Input features length (${inputFeatures.length}) does not match input layer neuron count (${this.layers[0].inputNeuronCount})`);
-        }
-        if (targetValues.length !== this.layers[this.layers.length - 1].outputNeuronCount) {
-            throw new Error(`[NeuralNetwork::backPropagation] Target values length (${targetValues.length}) does not match output layer neuron count (${this.layers[this.layers.length - 1].outputNeuronCount})`);
-        }
-
         const output = this.feedForward(inputFeatures);
 
         let nextLayerDeltas = null;

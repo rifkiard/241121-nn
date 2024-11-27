@@ -107,14 +107,16 @@ class Layer {
     }
 
     #computeWeightedSum(inputValues, weights, bias) {
-        let sum = 0;
+        // let sum = 0;
 
-        // dot product.
-        for (let i = 0; i < inputValues.length; i++) {
-            sum += inputValues[i] * weights[i];
-        }
+        // // dot product.
+        // for (let i = 0; i < inputValues.length; i++) {
+        //     sum += inputValues[i] * weights[i];
+        // }
 
-        return sum + bias;
+        // return sum + bias;
+        const dotProduct = inputValues.reduce((sum, value, i) => sum + value * weights[i], 0);
+        return dotProduct + bias;
     }
 
     feedForward(inputValues) {

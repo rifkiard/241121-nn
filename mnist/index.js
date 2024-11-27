@@ -87,9 +87,14 @@ shuffleArray(mnist);
 
 const nn = NeuralNetwork.load(__dirname + '/model.json');
 
-console.log(nn.feedForward(mnist[0].pixels));
-console.log(mnist[0].label);
-console.log(mnist[0].oneHotLabel);
+var test = nn.feedForward(mnist[0].pixels);
+console.log("Label: ", mnist[0].label);
+
+const indexOfMax = test.reduce((maxIndex, currentValue, currentIndex, array) =>
+    currentValue > array[maxIndex] ? currentIndex : maxIndex, 0);
+
+console.log("test result: ", indexOfMax);
+renderImage(mnist[0].pixels.map(x => x * 255), 28, 28, __dirname + '/test.png');
 
 const learningRate = 0.0001;
 const epochs = 100_000;
@@ -124,7 +129,7 @@ function trainNetwork() {
 
         let elapsedTime = (Date.now() - startTime) / 1000;
 
-        console.log(`Epoch ${i + 1}, Mean Error: ${totalError / mnist.length}, Elapsed Time: ${elapsedTime} seconds`);
+        console.log(`Epoch ${i + 1}, Mean Error: ${totalError / mnist.length}, Accuracy: ${((1 - totalError / mnist.length) * 100).toFixed(4)}%, Elapsed Time: ${elapsedTime} seconds`);
 
         if (totalError / processedSamples < 1e-5) {
             console.log("Convergence reached, stopping training.");
